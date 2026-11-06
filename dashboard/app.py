@@ -4,7 +4,7 @@ import plotly.express as px
 import os
 
 st.set_page_config(page_title="News Bias Analyzer", layout="wide")
-st.title("📰 News Bias Analyzer")
+st.title("News Bias Analyzer")
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "../data/processed/articles.csv")
 
@@ -20,13 +20,13 @@ if df is None:
     st.warning("No processed data found. Run the scraper and processing pipeline first.")
     st.stop()
 
-# ── Sidebar filters
+#Sidebar filters
 st.sidebar.header("Filters")
 sources = df["source"].unique().tolist() if "source" in df.columns else []
 selected_sources = st.sidebar.multiselect("News source", sources, default=sources)
 df = df[df["source"].isin(selected_sources)] if selected_sources else df
 
-# ── KPI row
+#KPI row
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total articles", len(df))
 
@@ -44,7 +44,7 @@ if "topic" in df.columns:
 
 st.divider()
 
-# ── Charts
+#Charts
 left, right = st.columns(2)
 
 if "sentiment" in df.columns:
@@ -71,7 +71,7 @@ if "topic" in df.columns and "bias_score" in df.columns:
         fig2.update_layout(margin=dict(t=10, b=10), height=300, coloraxis_showscale=False)
         st.plotly_chart(fig2, use_container_width=True)
 
-# ── Article table
+#Article table
 st.subheader("Articles")
 display_cols = [c for c in ["source", "title", "sentiment", "bias_score", "topic"] if c in df.columns]
 sort_col = "bias_score" if "bias_score" in df.columns else None
